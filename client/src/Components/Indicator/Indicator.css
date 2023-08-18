@@ -1,0 +1,15 @@
+.left-circle,
+.right-circle {
+    transform: translateY(-50%);
+    width: 250px;
+    height: 250px;
+    background-color: #000;
+    border-radius: 50%;
+    align-self: center;
+
+}
+
+.empty-div{
+    width: 250px;
+    height: 250px;
+}

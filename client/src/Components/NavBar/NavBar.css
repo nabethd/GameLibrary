@@ -1,0 +1,35 @@
+.navbar {
+    background-color: #333;
+    padding: 10px;
+}
+
+.navbar .nav-link {
+    text-decoration: none;
+    color: #fff;
+    padding: 10px;
+    transition: all 0.3s ease;
+    margin-right: 10px;
+}
+
+.navbar .nav-link:last-child {
+    margin-right: 0;
+}
+
+.navbar .nav-link:hover {
+    background-color: #555;
+    border-radius: 5px;
+}
+
+.navbar .nav-link.active {
+    background-color: #555;
+    border-radius: 5px;
+    color: #fff;
+}
+
+.navbar .nav-link.active span {
+    font-weight: bold;
+}
+
+.navbar .nav-link:first-child {
+    font-size: 20px;
+}

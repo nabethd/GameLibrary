@@ -1,0 +1,87 @@
+.game-details-page {
+    padding: 20px;
+    background-color: #ffffff;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
+    display: flex;
+}
+
+.game-form {
+    margin-right: 400px;
+}
+
+.game-form h2 {
+    margin-top: 0;
+}
+
+.game-form form {
+    display: flex;
+    flex-direction: column;
+}
+
+.game-form .input-group {
+    margin-bottom: 20px;
+}
+
+.game-form .medium-input-length {
+    margin-bottom: 20px;
+    width: 350px;
+}
+
+.game-form .short-input-length {
+    margin-bottom: 20px;
+    width: 50px;
+}
+
+.game-form label {
+    font-weight: bold;
+}
+
+.game-form .required {
+    color: red;
+}
+
+.game-form input[type="text"],
+.game-form input[type="number"] {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.game-form .image-preview {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.game-form .image-preview img {
+    max-width: 100%;
+    max-height: 200px;
+}
+
+.game-form .form-row {
+    display: flex;
+    gap: 40px;
+}
+
+.game-form .button-group {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 20px;
+}
+
+.game-form .button-group button {
+    padding: 8px 16px;
+    margin-left: 10px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.game-form .add-button, .update-button {
+    background-color: #007bff;
+    border: none;
+    color: #fff;
+}
+
+.game-form .add-button:hover, .update-button:hover{
+    background-color: #0069d9;
+}
