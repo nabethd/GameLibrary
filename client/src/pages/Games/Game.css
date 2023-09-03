@@ -3,7 +3,7 @@
     padding: 20px;
     border-radius: 10px;
     margin: 20px;
-    box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
 }
 
 .filters {
@@ -17,7 +17,7 @@
     padding: 10px;
     border: none;
     border-radius: 5px;
-    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     font-size: 14px;
     width: 250px;
 }
@@ -26,7 +26,7 @@
     padding: 10px;
     border: none;
     border-radius: 5px;
-    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     font-size: 14px;
     background-color: #fff;
     width: 150px;
@@ -57,10 +57,10 @@
     height: 50px;
     object-fit: cover;
     border-radius: 30%;
-    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.create-game-button {
+.create-game-button, .order-game-button {
     margin-left: auto;
     display: inline-block;
     padding: 8px 16px;
@@ -73,7 +73,7 @@
     transition: background-color 0.3s ease;
 }
 
-.create-game-button:hover {
+.create-game-button:hover, .order-game-button:hover{
     background-color: #0069d9;
 }
 

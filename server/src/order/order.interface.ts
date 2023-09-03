@@ -2,7 +2,7 @@ import { Document, Types } from 'mongoose';
 
 export enum Status {
     Returned = 'returned',
-    Away = 'away',
+    Ongoing = 'ongoing',
 }
 interface DocumentResults<T> {
     _doc: T;

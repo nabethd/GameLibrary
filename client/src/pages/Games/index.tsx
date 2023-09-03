@@ -1,36 +1,28 @@
-import React, { useEffect, useState } from "react";
-import { AxiosResponse } from "axios";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { getGames } from "../../API/gameApi";
-import { GameData } from "../../types";
 import "./Game.css";
+import OrderGameModal from "../../Components/OrderGameModal";
+import useFetchGamesQuery from "../../queries/use-fetch-games-query";
 
 const Games = () => {
   const [filterValue, setFilterValue] = useState("");
+  const [isOrderModalOpen, setIsOrderModalOpen] = useState(false);
+  const [orderGameId, setOrderGameId] = useState("");
   const [isAvailableFilter, setIsAvailableFilter] = useState("");
+  const { data: games = [] } = useFetchGamesQuery();
 
-  const [games, setGames] = useState<GameData[]>([]);
   const navigate = useNavigate();
-
-  useEffect(() => {
-    const getAllGames = async () => {
-      try {
-        const res: AxiosResponse<GameData[]> = await getGames();
-        if (Array.isArray(res.data)) {
-          setGames(res.data);
-        }
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    getAllGames();
-  }, []);
 
   const handleCreateAddGame = () => {
     navigate("/games/new");
   };
   const handleUpdateGame = (gameId: string) => {
     navigate(`/games/${gameId}`);
+  };
+  const orderGame = (event: React.MouseEvent, gameId: string) => {
+    event.stopPropagation();
+    setOrderGameId(gameId);
+    setIsOrderModalOpen(true);
   };
 
   const handleFilterChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -93,6 +85,7 @@ const Games = () => {
             <th>Name</th>
             <th>Hebrew Name</th>
             <th>Available Copies</th>
+            <th></th>
           </tr>
         </thead>
         <tbody>
@@ -114,10 +107,28 @@ const Games = () => {
               <td>{game.name}</td>
               <td>{game.hebrewName}</td>
               <td>{game.availableCopies}</td>
+              <td>
+                <button
+                  className="order-game-button"
+                  onClick={(e) => orderGame(e, game.id)}
+                >
+                  {" "}
+                  order{" "}
+                </button>
+              </td>
             </tr>
           ))}
         </tbody>
       </table>
+      {isOrderModalOpen && (
+        <OrderGameModal
+          onClose={() => {
+            setIsOrderModalOpen(false);
+            setOrderGameId("");
+          }}
+          gameId={orderGameId}
+        />
+      )}
     </div>
   );
 };

@@ -1,6 +1,6 @@
 import { Request, Response, Router } from 'express';
 import { body, param } from 'express-validator';
-import { createNewOrder, findAndUpdateOrder, findOneOrder, getAllOrders } from './order.service';
+import { closeOrder, createNewOrder, findOneOrder, getAllOrders } from './order.service';
 
 export const orderRouter = Router();
 
@@ -50,18 +50,12 @@ orderRouter.get(
 // Update order
 orderRouter.put(
     '/order/:orderId',
-    [
-        param('orderId').not().isEmpty().withMessage('orderId must be provided'),
-        body('name').not().isEmpty().withMessage('order name must be provided'),
-        body('hebrewName').not().isEmpty().withMessage('order name must be provided'),
-        body('imageUrl').not().isEmpty().withMessage('imageUrl must be provided'),
-        body('copies').not().isEmpty().isInt().withMessage('copies must be provided'),
-    ],
+    [param('orderId').not().isEmpty().withMessage('orderId must be provided')],
     async (req: Request, res: Response) => {
         try {
             const { orderId } = req.params;
 
-            const order = await findAndUpdateOrder(orderId, req.body);
+            const order = await closeOrder({ orderId });
             res.status(201).json(order);
         } catch (error: any) {
             console.error('Error Updating order:', error);

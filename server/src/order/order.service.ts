@@ -1,6 +1,7 @@
 import { createOrder, findOrder, getOrders, updateOrder } from './order.dal';
 import { IOrderAttr, Status } from './order.interface';
 import { findAndUpdateGame, findOneGame } from '../game/game.service';
+import { addOrderToCustomer } from '../customer/customer.service';
 
 const createNewOrder = async ({ gameId, customerId }: { gameId: string; customerId: string }) => {
     const game = await findOneGame(gameId);
@@ -12,42 +13,42 @@ const createNewOrder = async ({ gameId, customerId }: { gameId: string; customer
         const order = await createOrder({
             gameId,
             customerId,
-            status: Status.Away,
+            status: Status.Ongoing,
             borrowedDate: new Date(),
         });
 
         await findAndUpdateGame(gameId, {
-            availableCopies: game.availableCopies--,
+            availableCopies: game.availableCopies - 1,
         });
 
-        return order;
+        await addOrderToCustomer(order.id, customerId);
+        return order.id;
     } catch (error) {
         console.error('Error creating order:', error);
         throw error;
     }
 };
 
-const closeOrder = async ({ gameId, customerId }: { gameId: string; customerId: string }) => {
-    const game = await findOneGame(gameId);
+const closeOrder = async ({ orderId }: { orderId: string }) => {
+    const order = await findOneOrder(orderId);
 
-    if (!game || game.availableCopies === 0) {
-        throw new Error('This game is not available');
+    if (!order) {
+        throw new Error('This order is not available');
     }
     try {
-        const order = await createOrder({
-            gameId,
-            customerId,
-            status: Status.Away,
-            borrowedDate: new Date(),
+        await findAndUpdateOrder(orderId, {
+            status: Status.Returned,
+            returnedDate: new Date(),
         });
+        const game = await findOneGame(order.gameId);
 
-        await findAndUpdateGame(gameId, {
-            availableCopies: game.availableCopies--,
+        await findAndUpdateGame(order.gameId, {
+            availableCopies: game?.availableCopies! + 1,
         });
 
         return order;
     } catch (error) {
-        console.error('Error creating order:', error);
+        console.error('Error closing order:', error);
         throw error;
     }
 };
@@ -76,4 +77,4 @@ const findAndUpdateOrder = async (orderId: string, order: Partial<IOrderAttr>) =
     }
 };
 
-export { createNewOrder, getAllOrders, findOneOrder, findAndUpdateOrder };
+export { createNewOrder, getAllOrders, findOneOrder, findAndUpdateOrder, closeOrder };

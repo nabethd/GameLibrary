@@ -4,6 +4,7 @@ import { Order } from './order.model';
 const createOrder = async (data: Omit<IOrderAttr, 'returnedDate'>) => {
     const order = new Order(data);
     await order.save();
+    return order;
 };
 
 const updateOrder = async (id: string, data: Partial<IOrderAttr>) => {
@@ -15,8 +16,7 @@ const updateOrder = async (id: string, data: Partial<IOrderAttr>) => {
 };
 
 const getOrders = async () => {
-    const res = await Order.find();
-    return res;
+    return await Order.find();
 };
 
 const findOrder = (orderId: string) => {

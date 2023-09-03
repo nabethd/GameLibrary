@@ -26,14 +26,7 @@ const customerSchema = new Schema<ICustomer>(
             type: String,
         },
         orders: {
-            type: [
-                {
-                    orderId: {
-                        type: String,
-                        required: true,
-                    },
-                },
-            ],
+            type: [String], // Define orders as an array of strings
             default: [],
         },
     },

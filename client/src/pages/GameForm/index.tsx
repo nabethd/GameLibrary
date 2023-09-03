@@ -1,38 +1,22 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { GameData } from "../../types";
-import { createGame, findGame, updateGame } from "../../API/gameApi";
+import { createGame, updateGame } from "../../API/gameApi";
 import { emptyImageUrl, NEW_GAME } from "../../Constants";
 import "./GameForm.css";
+import useFetchGamesQuery from "../../queries/use-fetch-games-query";
 
 const GameForm = () => {
   const [game, setGame] = useState<Partial<GameData>>(NEW_GAME);
   const { gameId } = useParams();
   const isNew = !gameId;
+  const { data: games = [], isLoading } = useFetchGamesQuery();
 
   useEffect(() => {
-    if (!gameId) {
-      return;
-    }
-    const getGame = async () => {
-      try {
-        const response = await findGame(gameId);
-        if (!response) {
-          return;
-        }
-        const game = response.data;
-        setGame((prevState) => {
-          return {
-            ...prevState,
-            ...response.data,
-          };
-        });
-      } catch (e) {
-        console.log("didnt found game");
-      }
-    };
-    getGame();
-  }, []);
+    if (isLoading) return;
+    const queryGame = games.find((game) => game.id === gameId);
+    setGame(queryGame || NEW_GAME);
+  }, [gameId, isLoading]);
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
@@ -87,13 +71,11 @@ const GameForm = () => {
 
   const handleAddGame = async () => {
     await createGame(game);
-    console.log("Creating game:", game);
     setGame(NEW_GAME);
   };
 
   const handleUpdateGame = async () => {
     await updateGame(game);
-    console.log("Updating game:", game);
   };
 
   return (

@@ -11,7 +11,7 @@ export interface ICustomer extends Document, DocumentResults<ICustomer> {
     address: string;
     phone: string;
     currentGame?: string;
-    orders?: string[];
+    orders: string[];
 }
 
 export interface ICustomerAttr {
@@ -21,4 +21,5 @@ export interface ICustomerAttr {
     phone: string;
     address?: string;
     currentGame?: string;
+    orders?: string[];
 }

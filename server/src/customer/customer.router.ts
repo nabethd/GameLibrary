@@ -1,6 +1,6 @@
 import { Request, Response, Router } from 'express';
 import { body } from 'express-validator';
-import { createCustomer } from './customer.service';
+import { createCustomer, getCustomerByKeyword } from './customer.service';
 
 export const customerRouter = Router();
 
@@ -20,5 +20,14 @@ customerRouter.post(
         } catch (e) {}
     },
 );
+
+customerRouter.get('/customer', [body('keyword')], async (req: Request, res: Response) => {
+    const { keyword = '' } = req.body;
+    try {
+        const customers = await getCustomerByKeyword(keyword);
+
+        res.status(200).json(customers);
+    } catch (e) {}
+});
 
 export default customerRouter;

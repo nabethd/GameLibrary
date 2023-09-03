@@ -1,6 +1,7 @@
 export const SERVER_URL = "http://localhost:3001/game-library";
 export const CUSTOMER_URL = "/customer";
 export const GAME_URL = "/game";
+export const ORDER_URL = "/order";
 
 export const emptyImageUrl =
   "https://png.pngtree.com/png-clipart/20210725/original/pngtree-abstract-line-drawing-four-people-teamwork-puzzle-png-image_6551528.jpg";
