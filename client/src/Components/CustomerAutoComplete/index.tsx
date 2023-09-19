@@ -21,7 +21,9 @@ const CustomerAutoComplete = ({ onChange, value }: ICustomerAutoComplete) => {
         return filter(options, params);
       }}
       options={customersList}
-      getOptionLabel={(option) => `${option.firstName} ${option.lastName}`}
+      getOptionLabel={(option) =>
+        `${option.firstName} ${option.lastName}: ${option.phone}`
+      }
       onChange={(_, input) => {
         onChange(input);
       }}

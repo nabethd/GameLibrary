@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import "./Game.css";
+import Button from "@mui/material/Button";
 import OrderGameModal from "../../Components/OrderGameModal";
 import useFetchGamesQuery from "../../queries/use-fetch-games-query";
+import "./Games.css";
 
 const Games = () => {
   const [filterValue, setFilterValue] = useState("");
@@ -40,14 +41,12 @@ const Games = () => {
       game.name.toLowerCase().includes(filterValue.toLowerCase()) ||
       game.hebrewName.toLowerCase().includes(filterValue.toLowerCase());
 
-    // Filter by isAvailable
     if (isAvailableFilter === "available") {
       return filterByName && game.availableCopies > 0;
     } else if (isAvailableFilter === "unavailable") {
       return filterByName && game.availableCopies === 0;
     }
 
-    // Filter by name
     return filterByName;
   });
 
@@ -73,15 +72,20 @@ const Games = () => {
           <option value="available">Available</option>
           <option value="unavailable">Unavailable</option>
         </select>
-        <button onClick={handleCreateAddGame} className="create-game-button">
+        <Button
+          style={{ marginLeft: "auto" }}
+          variant="contained"
+          onClick={handleCreateAddGame}
+          className="create-game-button"
+        >
           Add New Game
-        </button>
+        </Button>
       </div>
 
       <table className="games-table">
         <thead>
           <tr>
-            <th>Image</th>
+            <th></th>
             <th>Name</th>
             <th>Hebrew Name</th>
             <th>Available Copies</th>
@@ -108,13 +112,15 @@ const Games = () => {
               <td>{game.hebrewName}</td>
               <td>{game.availableCopies}</td>
               <td>
-                <button
+                <Button
                   className="order-game-button"
                   onClick={(e) => orderGame(e, game.id)}
+                  disabled={game.availableCopies === 0}
+                  variant={game.availableCopies > 0 ? "contained" : "outlined"}
                 >
                   {" "}
                   order{" "}
-                </button>
+                </Button>
               </td>
             </tr>
           ))}

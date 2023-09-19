@@ -12,8 +12,8 @@ orderRouter.post(
         const { gameId, customerId } = req.body;
 
         try {
-            await createNewOrder({ gameId, customerId });
-            res.status(201).send();
+            const order = await createNewOrder({ gameId, customerId });
+            res.status(201).send(order);
         } catch (error: any) {
             res.status(500).send(`Error creating new order:  ${error.message}`);
         }

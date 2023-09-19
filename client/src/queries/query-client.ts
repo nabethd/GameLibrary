@@ -4,6 +4,7 @@ export const QUERY_KEYS = {
   customers: (keyword: string) => ["customers", keyword],
   game: (gameId: string) => ["game", gameId],
   games: ["games"],
+  orders: ["orders"],
 };
 
 const queryClient = new QueryClient({

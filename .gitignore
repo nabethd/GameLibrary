@@ -5,3 +5,4 @@ node_modules/
 ./server/src/secrets.ts/
 .idea/
 .vscode/
+/server/src/secrets.ts

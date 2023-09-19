@@ -4,7 +4,7 @@ import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import CustomerAutoComplete from "../CustomerAutoComplete";
 import { CustomerData } from "../../types";
-import { orderGame } from "../../API/orderApi";
+import useOrderGameMutation from "../../mutations/use-order-game-mutation";
 
 const OrderGameModal = ({
   onClose,
@@ -14,18 +14,18 @@ const OrderGameModal = ({
   gameId: string;
 }) => {
   const [customer, setCustomer] = useState<CustomerData>();
-
+  const { mutateAsync: orderGame } = useOrderGameMutation();
   const onChange = (selectedCustomer: CustomerData) => {
     setCustomer(selectedCustomer);
   };
   const onSend = async () => {
     if (customer) {
-      await orderGame(gameId, customer.id);
+      await orderGame({ gameId, customerId: customer.id });
     }
     onClose();
   };
   return (
-    <Modal open={true} onClose={onClose}>
+    <Modal open={true} onClose={onClose} className="order-game-modal">
       <Box
         sx={{
           position: "absolute",
@@ -40,12 +40,14 @@ const OrderGameModal = ({
       >
         <h2>Please choose a customer</h2>
         <CustomerAutoComplete onChange={onChange} value={customer} />
-        <Button onClick={onClose} color="primary">
-          Close
-        </Button>
-        <Button onClick={onSend} color="primary">
-          Send
-        </Button>
+        <div style={{ margin: "8px 0 0 auto", width: "fit-content" }}>
+          <Button onClick={onClose} color="primary">
+            Close
+          </Button>
+          <Button onClick={onSend} color="primary" variant="contained">
+            Send
+          </Button>
+        </div>
       </Box>
     </Modal>
   );

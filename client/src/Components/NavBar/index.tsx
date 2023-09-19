@@ -29,6 +29,14 @@ const NavBar = () => {
       >
         Customers
       </Link>
+      <Link
+        to="/orders"
+        className={
+          location.pathname === "/orders" ? "nav-link active" : "nav-link"
+        }
+      >
+        Orders
+      </Link>
     </nav>
   );
 };

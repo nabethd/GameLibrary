@@ -16,7 +16,7 @@ const updateOrder = async (id: string, data: Partial<IOrderAttr>) => {
 };
 
 const getOrders = async () => {
-    return await Order.find();
+    return Order.find();
 };
 
 const findOrder = (orderId: string) => {

@@ -22,3 +22,27 @@ export type CustomerData = {
   orders: string[];
   id: string;
 };
+
+export type OrdersData = {
+  borrowedDate: Date;
+  returnedDate: Date;
+  status: Status;
+  customerId: string;
+  gameId: string;
+  id: string;
+};
+
+export type EnrichedOrdersData = {
+  borrowedDate: Date;
+  returnedDate: Date;
+  status: Status;
+  customerId: string;
+  gameId: string;
+  id: string;
+  game?: GameData;
+  customer?: CustomerData;
+};
+export enum Status {
+  Returned = "returned",
+  Ongoing = "ongoing",
+}

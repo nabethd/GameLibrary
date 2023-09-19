@@ -22,7 +22,7 @@ const createNewOrder = async ({ gameId, customerId }: { gameId: string; customer
         });
 
         await addOrderToCustomer(order.id, customerId);
-        return order.id;
+        return order;
     } catch (error) {
         console.error('Error creating order:', error);
         throw error;

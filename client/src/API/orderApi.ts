@@ -7,3 +7,11 @@ export const orderGame = async (gameId: string, customerId: string) => {
     customerId,
   });
 };
+
+export const closeOrder = async (orderId: string) => {
+  return await axios.put(SERVER_URL + ORDER_URL + "/" + orderId);
+};
+
+export const getOrders = async () => {
+  return await axios.get(SERVER_URL + ORDER_URL);
+};
