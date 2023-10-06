@@ -15,7 +15,7 @@ const updateGame = async (id: string, data: Partial<IGameAttr>) => {
 };
 
 const getGames = async () => {
-    const res = await Game.find();
+    const res = await Game.find().sort({ name: 1 });
     return res;
 };
 

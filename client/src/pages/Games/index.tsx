@@ -1,15 +1,20 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import Button from "@mui/material/Button";
 import OrderGameModal from "../../Components/OrderGameModal";
 import useFetchGamesQuery from "../../queries/use-fetch-games-query";
 import "./Games.css";
 
 const Games = () => {
-  const [filterValue, setFilterValue] = useState("");
   const [isOrderModalOpen, setIsOrderModalOpen] = useState(false);
   const [orderGameId, setOrderGameId] = useState("");
-  const [isAvailableFilter, setIsAvailableFilter] = useState("");
+  const [searchParam, setSearchParam] = useSearchParams({
+    filterValue: "",
+    isAvailableFilter: "all",
+  });
+  const filterValue = searchParam.get("filterValue") || "";
+  const isAvailableFilter = searchParam.get("isAvailableFilter") || "all";
+
   const { data: games = [] } = useFetchGamesQuery();
 
   const navigate = useNavigate();
@@ -27,13 +32,22 @@ const Games = () => {
   };
 
   const handleFilterChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setFilterValue(event.target.value);
+    setSearchParam(
+      (prev) => {
+        prev.set("filterValue", event.target.value);
+        return prev;
+      },
+      { replace: true }
+    );
   };
 
   const handleIsAvailableFilterChange = (
     event: React.ChangeEvent<HTMLSelectElement>
   ) => {
-    setIsAvailableFilter(event.target.value);
+    setSearchParam((prev) => {
+      prev.set("isAvailableFilter", event.target.value);
+      return prev;
+    });
   };
 
   const filteredGames = games.filter((game) => {
@@ -68,7 +82,7 @@ const Games = () => {
           onChange={handleIsAvailableFilterChange}
           className="filter-select"
         >
-          <option value="">All</option>
+          <option value="all">All</option>
           <option value="available">Available</option>
           <option value="unavailable">Unavailable</option>
         </select>
