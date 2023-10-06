@@ -6,18 +6,29 @@ import { OrdersData, Status } from "../../types";
 import useFetchOrdersQuery from "../../queries/use-fetch-orders-query";
 import ConfirmationModal from "../../Components/ConfirmationModal";
 import useCloseOrderMutation from "../../mutations/use-close-order-mutation";
+import { useSearchParams } from "react-router-dom";
 
 const Orders = () => {
-  const [filterValue, setFilterValue] = useState("");
   const [isConfirmationModalOpen, setIsConfirmationModalOpen] = useState(false);
   const [orderToClose, setOrderToClose] = useState<OrdersData | null>();
-  const [orderStatusFilter, setOrderStatusFilter] = useState("All");
+  const [searchParam, setSearchParam] = useSearchParams({
+    filterValue: "",
+    orderStatusFilter: "all",
+  });
+  const filterValue = searchParam.get("filterValue") || "";
+  const orderStatusFilter = searchParam.get("orderStatusFilter") || "all";
+
   const { data: orders = [] } = useFetchOrdersQuery();
-  const { mutateAsync: closeCustomerOrder } =
-    useCloseOrderMutation();
+  const { mutateAsync: closeCustomerOrder } = useCloseOrderMutation();
 
   const handleFilterChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setFilterValue(event.target.value);
+    setSearchParam(
+      (prev) => {
+        prev.set("filterValue", event.target.value);
+        return prev;
+      },
+      { replace: true }
+    );
   };
 
   const closeOrder = (order: OrdersData) => {
@@ -42,12 +53,13 @@ const Orders = () => {
   const handleOrderStatusFilterChange = (
     event: React.ChangeEvent<HTMLSelectElement>
   ) => {
-    setOrderStatusFilter(event.target.value);
+    setSearchParam((prev) => {
+      prev.set("orderStatusFilter", event.target.value);
+      return prev;
+    });
   };
 
   const filteredOrders = orders?.filter((order) => {
-    const filterByStatus =
-      order.status === orderStatusFilter || orderStatusFilter === "All";
     const filterByName =
       order.customer?.firstName
         .toLowerCase()
@@ -57,8 +69,13 @@ const Orders = () => {
         .includes(filterValue.toLowerCase()) ||
       order.game?.name.toLowerCase().includes(filterValue.toLowerCase()) ||
       order.game?.hebrewName.toLowerCase().includes(filterValue.toLowerCase());
+    if (orderStatusFilter === Status.Returned) {
+      return filterByName && order.status === Status.Returned;
+    } else if (orderStatusFilter === Status.Ongoing) {
+      return filterByName && order.status === Status.Ongoing;
+    }
 
-    return filterByName && filterByStatus;
+    return filterByName;
   });
 
   return (
@@ -79,7 +96,7 @@ const Orders = () => {
           onChange={handleOrderStatusFilterChange}
           className="filter-select"
         >
-          <option value="">All</option>
+          <option value="All">All</option>
           <option value={Status.Ongoing}>Ongoing</option>
           <option value={Status.Returned}>Returned</option>
         </select>
@@ -102,7 +119,11 @@ const Orders = () => {
             return (
               <tr
                 key={order.id}
-                className={order.status ? "ongoing-row" : "returned-row"}
+                className={
+                  order.status === Status.Ongoing
+                    ? "ongoing-row"
+                    : "returned-row"
+                }
               >
                 <td>{`${order.customer?.firstName} ${order.customer?.lastName}`}</td>
                 <td>
@@ -113,8 +134,12 @@ const Orders = () => {
                   />
                 </td>
                 <td>{order.game?.name}</td>
-                <td>{dateFormat(order.borrowedDate, "isoDateTime")}</td>
-                <td>{dateFormat(order.returnedDate, "isoDateTime")}</td>
+                <td>{dateFormat(order.borrowedDate, "dd-mm-yyyy HH:MM")}</td>
+                <td>
+                  {order.returnedDate
+                    ? dateFormat(order.returnedDate, "dd-mm-yyyy HH:MM")
+                    : ""}
+                </td>
                 <td>{order.status}</td>
                 <td>
                   <Button

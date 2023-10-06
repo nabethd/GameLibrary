@@ -29,7 +29,7 @@ const useCloseOrderMutation = () => {
         queryClient.setQueryData(QUERY_KEYS.orders, () => {
           return orders.map((order) => {
             return order.id === variables.orderId
-              ? { ...order, status: Status.Returned }
+              ? { ...order, status: Status.Returned, returnedDate: Date.now() }
               : order;
           });
         });

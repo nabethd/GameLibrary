@@ -78,11 +78,11 @@
 }
 
 .orders-table .ongoing-row {
-    background-color: #eaffea;
+    background-color: #f8ffc7;
     cursor: pointer;
 }
 
 .orders-table .returned-row {
-    background-color: #ffeaea;
+    background-color: #eaffea;
     cursor: pointer;
 }

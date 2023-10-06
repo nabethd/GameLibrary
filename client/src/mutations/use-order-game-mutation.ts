@@ -9,8 +9,7 @@ const useOrderGameMutation = () => {
   const queryClient = useQueryClient();
   const { data: games = [] } = useFetchGamesQuery();
   const { data: orders = [] } = useFetchOrdersQuery();
-  const { data: customers = [] } =
-    useFetchCustomersQuery();
+  const { data: customers = [] } = useFetchCustomersQuery();
 
   return useMutation(
     async ({ gameId, customerId }: { gameId: string; customerId: string }) => {
@@ -18,7 +17,7 @@ const useOrderGameMutation = () => {
       return result.data;
     },
     {
-      onSuccess: (data) => {
+      onSuccess: async (data) => {
         // Update the games data in the cache
         queryClient.setQueryData(QUERY_KEYS.games, () => {
           return games.map((game) => {
@@ -29,18 +28,7 @@ const useOrderGameMutation = () => {
           });
         });
 
-        const game = games.find((game) => game.id === data.gameId);
-        const customer = customers.find(
-          (customer) => customer.id === data.customerId
-        );
-        queryClient.invalidateQueries(QUERY_KEYS.orders);
-        // queryClient.setQueryData(QUERY_KEYS.orders, () => {
-        //   return orders.push({
-        //     ...data,
-        //     game: game,
-        //     customer: customer,
-        //   });
-        // });
+        await queryClient.refetchQueries(QUERY_KEYS.orders);
       },
     }
   );
